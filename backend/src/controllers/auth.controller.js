@@ -1,4 +1,4 @@
-import User from "../models/User";
+import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
 export async function signup(req,res) {
@@ -24,11 +24,11 @@ export async function signup(req,res) {
       return res.status(400).json({message: "Email already exists, please use a different one"})
     }
 
-
     const index = Math.floor(Math.random() * 100) + 1; // generate a number between 1 and 100
     const randomAvatar = `https://avatar.iran.liara.run/public/${index}.png`;
 
-    const newUser = new User.create({
+    //create new user
+    const newUser = await User.create({
       email,
       fullName,
       password,
