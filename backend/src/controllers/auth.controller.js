@@ -1,3 +1,4 @@
+import { upsertStreamUser } from "../lib/stream.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
@@ -35,7 +36,19 @@ export async function signup(req,res) {
       profilePic: randomAvatar
     })
 
-    //TODO: create the user in stream as well
+    try {
+      await upsertStreamUser({
+        id: newUser._id.toString(),
+        name: newUser.fullName,
+        image: newUser.profilePic || ""
+      })
+
+      console.log(`Stream user created for ${newUser.fullName}`);
+      
+    } catch(error) {
+      console.log("Error in creating stream user",error);
+    }
+
     const token = jwt.sign({userId: newUser._id}, process.env.JWT_SECRET_KEY, {expiresIn: "7d"});
     
     res.cookie("jwt", token, {
@@ -91,3 +104,5 @@ export async function logout(req,res) {
   res.status(200).json({success: true, message: "Successfully logged out"})
 }
 
+export async function onboard () {
+}
