@@ -141,12 +141,13 @@ export async function onboard(req, res) {
         image: updatedUser.profilePic || "",
       });
       console.log(`Stream user updated after onboarding for ${updatedUser.fullName}`);
+      
     } catch (streamError) {
       console.log("Error updating Stream user during onboarding:", streamError.message);
     }
 
     res.status(200).json({ success: true, user: updatedUser });
-    
+
   } catch (error) {
     console.error("Onboarding error:", error);
     res.status(500).json({ message: "Internal Server Error" });
