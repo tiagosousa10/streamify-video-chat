@@ -1,4 +1,4 @@
-import User from "../models/User";
+import User from "../models/User.js";
 
 export async function getRecommendedUsers(req,res) {
   try {
@@ -13,17 +13,24 @@ export async function getRecommendedUsers(req,res) {
       ]
     })
 
-    res.status(200).json({success: true, recommendedUsers}) 
+    res.status(200).json(recommendedUsers) 
+
   } catch(error) {
     console.log("Error in getRecommendedUsers controller",error);
     res.status(500).json({message: "Internal server error"})
   }
 }
 
+
 export async function getMyFriends(req,res) {
   try {
+    const user = await User.findById(req.user.id).select("-friends")
+    .populate("friends","fullName profilePic nativeLanguage learningLanguage")
+
+    res.status(200).json(user.friends)
 
   } catch(error) {
-
+    console.log("Error in getMyFriends controller",error);
+    res.status(500).json({message: "Internal server error"})
   }
 }
