@@ -8,7 +8,7 @@ import ChatPage from './pages/ChatPage.jsx'
 import OnboardingPage from './pages/OnboardingPage.jsx'
 import { Toaster } from 'react-hot-toast'
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import { axiosInstance } from './lib/axios.js'
 
 const App = () => {
   //tankstack query
@@ -17,7 +17,7 @@ const App = () => {
 
     queryFn: async() => {
 
-      const res = await axios.get("https://jsonplaceholder.typicode.com/todos")
+      const res = await axiosInstance.get("http://localhost:5001/api/auth/me");
       return res.data;
 
     }
