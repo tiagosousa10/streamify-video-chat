@@ -13,14 +13,13 @@ import { axiosInstance } from './lib/axios.js'
 const App = () => {
   //tankstack query
   //create, delete , ect -> use mutation
-  const {data, isLoading, error} = useQuery({queryKey:["todos"], 
-
+  const {data, isLoading, error} = useQuery({
+    queryKey:["todos"], 
     queryFn: async() => {
-
-      const res = await axiosInstance.get("http://localhost:5001/api/auth/me");
+      const res = await axiosInstance.get("/auth/me");
       return res.data;
-
-    }
+    },
+    retry: false // only fetch once -> auth check
   })
 
 
