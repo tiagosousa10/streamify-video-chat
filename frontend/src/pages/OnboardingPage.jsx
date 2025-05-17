@@ -20,11 +20,14 @@ const OnboardingPage = () => {
     profilePic: authUser.profilePic || "",
   })
 
-  const {mutate: onboardingMutation, isPending} =useMutation({
+  const {mutate: onboardingMutation, isPending} = useMutation({
     mutationFn: completeOnboarding, // api call to complete onboarding -> POST
     onSuccess: () => {
       toast.success("Profile onboarded successfully")
       queryClient.invalidateQueries({queryKey: ["authUser"]}) // to refetch
+    },
+    onError: (error) => {
+      toast.error(error.response.data.message)
     }
   })
 
@@ -40,7 +43,7 @@ const OnboardingPage = () => {
     setFormState({...formState, profilePic: randomAvatar})
     toast.success("Random avatar generated")
   }
-  
+
 
   return (
     <div className='min-h-screen bg-base-100 flex items-center justify-center p-4'>
