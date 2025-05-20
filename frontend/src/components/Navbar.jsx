@@ -3,7 +3,8 @@ import useAuthUser from '../hooks/useAuthUser'
 import { Link, useLocation } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { logout } from '../lib/api'
-import { BellIcon, ShipWheelIcon } from 'lucide-react'
+import { BellIcon, LogOutIcon, ShipWheelIcon } from 'lucide-react'
+import ThemeSelector from './ThemeSelector'
 
 
 const Navbar = () => {
@@ -17,9 +18,10 @@ const Navbar = () => {
    const {mutate: logoutMutation} =useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["authUser"]})
+      queryClient.invalidateQueries({queryKey: ["authUser"]}) // to refetch
     }
    })
+
 
   return (
     <nav className='bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 flex items-center'>
@@ -47,6 +49,19 @@ const Navbar = () => {
 
           </div>
 
+          {/* TODO */}
+          <ThemeSelector />
+
+          <div className='avatar'>
+            <div className='w-9 rounded-full'>
+              <img src={authUser?.profilePic} alt="" />
+            </div>
+          </div>
+
+          {/* logout button */}
+            <button className='btn btn-ghost btn-circle' onClick={logoutMutation}>
+              <LogOutIcon className='h-6 w-6 text-base-content opacity-70' />
+            </button>
           </div>
       </div>
     </nav>
