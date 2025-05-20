@@ -16,7 +16,7 @@ const App = () => {
   //tankstack query
   //create, delete , ect -> use mutation
   const {isLoading, authUser} = useAuthUser()
-  const {theme, setTheme} =useThemeStore()
+  const {theme} =useThemeStore()
 
   const isAuthenticated = Boolean(authUser)
   const isOnboarded = authUser?.isOnboarded;
@@ -25,7 +25,6 @@ const App = () => {
 
   return (
     <div className='h-screen' data-theme={theme}>
-      <button onClick={() => setTheme("night")}>update to night</button>
       <Routes>
         <Route path='/' element={isAuthenticated && isOnboarded ? (
           <Layout showSidebar={true}>
