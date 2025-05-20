@@ -10,11 +10,13 @@ import { Toaster } from 'react-hot-toast'
 import PageLoader from './components/PageLoader.jsx'
 import useAuthUser from './hooks/useAuthUser.js'
 import Layout from './components/Layout.jsx'
+import { useThemeStore } from './store/useThemeStore.js'
 
 const App = () => {
   //tankstack query
   //create, delete , ect -> use mutation
   const {isLoading, authUser} = useAuthUser()
+  const {theme, setTheme} =useThemeStore()
 
   const isAuthenticated = Boolean(authUser)
   const isOnboarded = authUser?.isOnboarded;
@@ -22,7 +24,8 @@ const App = () => {
   if(isLoading) return <PageLoader />
 
   return (
-    <div className='h-screen' data-theme="forest">
+    <div className='h-screen' data-theme={theme}>
+      <button onClick={() => setTheme("night")}>update to night</button>
       <Routes>
         <Route path='/' element={isAuthenticated && isOnboarded ? (
           <Layout showSidebar={true}>
