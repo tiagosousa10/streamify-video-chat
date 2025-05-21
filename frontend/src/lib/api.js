@@ -31,3 +31,14 @@ export const completeOnboarding = async (userData) => {
 
   return res.data;
 }
+
+
+export async function getUserFriends() {
+  const res = await axiosInstance.get("/auth/me/friends")
+  return res.data
+}
+
+export async function getRecommendedUsers() {
+  const res = await axiosInstance.get("/users")
+  return res.data
+}
