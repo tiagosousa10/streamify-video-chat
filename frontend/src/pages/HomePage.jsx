@@ -4,6 +4,8 @@ import { getOutgoingFriendReqs, getRecommendedUsers, getUserFriends, sendFriendR
 import { Link } from 'react-router-dom'
 import { UsersIcon } from 'lucide-react'
 import FriendCard from '../components/FriendCard'
+import NoFriendsFound from '../components/NoFriendsFound'
+
 
 const HomePage = () => {
   const queryClient = useQueryClient()
@@ -61,7 +63,7 @@ const HomePage = () => {
             <span className='loading loading-spinner loading-lg' />
           </div>
         ) : friends.length === 0 ? (
-          <p>No friends yet</p>
+          <NoFriendsFound />
         ) : (
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
             {friends.map((friend) => (
