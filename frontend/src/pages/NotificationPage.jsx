@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import React from 'react'
 import { acceptFriendRequest, getFriendRequests } from '../lib/api'
-import { BellIcon, UserCheckIcon } from 'lucide-react'
+import { BellIcon, ClockIcon, MessagesSquareIcon, UserCheckIcon } from 'lucide-react'
 
 const NotificationPage = () => {
   const queryClient = useQueryClient()
@@ -91,6 +91,36 @@ const NotificationPage = () => {
                   <BellIcon className='size-5 text-success' />
                   New Connections
                 </h2>
+
+                <div className='space-y-3'>
+                  {acceptedRequests.map((notification) => (
+                    <div key={notification._id} className='card bg-base-200 shadow-sm'>
+                      <div className='card-body p-4'>
+                        <div className='flex items-start gap-3'>
+                          <div className='avatar mt-1 size-10 rounded-full'>
+                            <img src={notification.recipient.profilePic} alt={notification.recipient.fullName} />
+                          </div>
+
+                          <div className='flex-1'>
+                            <h3 className='font-semibold'>
+                              {notification.recipient.fullName} 
+                            </h3>
+                            <p className='text-sm my-1'>{notification.recipient.fullName} accepted your friend request</p>
+                            <p className='text-xs flex items-center opacity-70'>
+                              <ClockIcon className='size-3 mr-1' />
+                              Recently
+                            </p>
+                          </div>
+                          <div className='badge badge-success'>
+                            <MessagesSquareIcon className='size-3 mr-1' />
+                            New Friend
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  ))}
+                </div>
 
               </section>
             )}
