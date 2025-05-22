@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getOutgoingFriendReqs, getRecommendedUsers, getUserFriends, sendFriendRequest } from '../lib/api'
 import { Link } from 'react-router-dom'
-import { MapPinIcon, UsersIcon } from 'lucide-react'
+import { CheckCircleIcon, MapPinIcon, UserPlusIcon, UsersIcon } from 'lucide-react'
 import FriendCard, { getLanguageFlag } from '../components/FriendCard'
 import NoFriendsFound from '../components/NoFriendsFound'
 
@@ -135,7 +135,25 @@ const HomePage = () => {
                         )}
 
 
-                        
+                        {/* action button  */}
+                        <button
+                          className={`btn w-full mt-2 ${hasRequestBeenSent} ? "btn-disabled" : "btn-primary"`}
+                          onClick={() => sendRequestMutation(user._id)}
+                          disabled={hasRequestBeenSent || isPending}
+                        >
+                          {hasRequestBeenSent ? (
+                            <>
+                              <CheckCircleIcon className='size-4 mr-2' />
+                              Request Sent
+                            </>
+                          ) : (
+                            <>
+                              <UserPlusIcon className='size-4 mr-2' />
+                              Send Request
+                            </>
+                          )}
+
+                        </button>
                       </div>
                     </div>
                   )
