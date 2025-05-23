@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import useAuthUser from '../hooks/useAuthUser'
 import { useQuery } from '@tanstack/react-query'
@@ -13,6 +13,11 @@ import {
   Thread,
   Window
 } from "stream-chat-react"
+import { StreamChat } from 'stream-chat'
+import toast from 'react-hot-toast'
+import ChatLoader from '../components/ChatLoader'
+
+const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY
 
 const ChatPage = () => {
   const {id:targetUserId} = useParams()
@@ -28,9 +33,66 @@ const ChatPage = () => {
     enabled: !!authUser // only fetch if authUser is available
   })
 
+  const tokenData = data
+
+  useEffect(() => {
+    const initChat = async () => {
+      if(!tokenData || !authUser) return;
+
+      try {
+        console.log("Initializing chat client...")
+
+        const client = StreamChat.getInstance(STREAM_API_KEY) // create a client with the API key from STREAM 
+        console.log("Token Recebido", tokenData.token, typeof tokenData.token)
+
+        await client.connectUser({
+          id: authUser._id,
+          name: authUser.fullName,
+          image: authUser.profilePic
+        }, tokenData)
+
+        const channelId= [authUser._id, targetUserId].sort().join("-") // create a channel id between the current user and the target user
+
+        const currentChannel = client.channel("messaging", channelId, {
+          members: [authUser._id, targetUserId]
+        })
+
+        await currentChannel.watch() // watch the channel
+
+        setChatClient(client)
+        setChannel(currentChannel)
+
+      } catch(error) {
+        console.error("Error in initializing chat:",error)
+        toast.error("Error in initializing chat:",error)
+      } finally {
+          setLoading(false)
+
+      }
+    }
+
+    initChat()
+  }, [tokenData, authUser, targetUserId])
+
+
+  if(loading || !chatClient || !channel) return <ChatLoader />
+
 
   return (
-    <div>
+    <div className='h-[93vh]'>
+      <Chat client={chatClient}>
+        <Channel channel={channel}>
+          <div className='w-full relative'>
+            <Window>
+              <ChannelHeader />
+              <MessageList />
+              <MessageInput focus />
+            </Window>
+          </div>
+          <Thread />
+        </Channel>
+
+      </Chat>
 
     </div>
   )
