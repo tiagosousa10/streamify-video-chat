@@ -16,6 +16,7 @@ import {
 import { StreamChat } from 'stream-chat'
 import toast from 'react-hot-toast'
 import ChatLoader from '../components/ChatLoader'
+import CallButton from '../components/CallButton'
 
 const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY
 
@@ -43,7 +44,6 @@ const ChatPage = () => {
         console.log("Initializing chat client...")
 
         const client = StreamChat.getInstance(STREAM_API_KEY) // create a client with the API key from STREAM 
-        console.log("Token Recebido", tokenData.token, typeof tokenData.token)
 
         await client.connectUser({
           id: authUser._id,
@@ -75,6 +75,10 @@ const ChatPage = () => {
   }, [tokenData, authUser, targetUserId])
 
 
+  const handleVideoCall = () => {
+
+  }
+
   if(loading || !chatClient || !channel) return <ChatLoader />
 
 
@@ -83,6 +87,7 @@ const ChatPage = () => {
       <Chat client={chatClient}>
         <Channel channel={channel}>
           <div className='w-full relative'>
+            <CallButton handleVideoCall={handleVideoCall} />
             <Window>
               <ChannelHeader />
               <MessageList />
