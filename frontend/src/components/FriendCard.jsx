@@ -1,4 +1,3 @@
-import React from 'react'
 import { LANGUAGE_TO_FLAG } from '../constants';
 import { Link } from 'react-router-dom'
 

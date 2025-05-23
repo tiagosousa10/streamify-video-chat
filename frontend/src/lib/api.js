@@ -34,7 +34,7 @@ export const completeOnboarding = async (userData) => {
 
 
 export async function getUserFriends() {
-  const response = await axiosInstance.get("/auth/me/friends")
+  const response = await axiosInstance.get("/users/friends")
   return response.data
 }
 
