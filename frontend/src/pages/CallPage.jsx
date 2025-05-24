@@ -5,9 +5,20 @@ import { useQuery } from '@tanstack/react-query'
 import { getStreamToken } from '../lib/api'
 
 import {
-
+  StreamVideo,
+  StreamVideoClient,
+  StreamCall,
+  CallControls,
+  SpeakerLayout,
+  StreamTheme,
+  CallingState,
+  useCallStateHooks,
 } from "@stream-io/video-react-sdk"
 import "@stream-io/video-react-sdk/dist/css/styles.css"
+import toast from 'react-hot-toast'
+import PageLoader from '../components/PageLoader'
+
+const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY
 
 const CallPage = () => {
   const {id: callId} = useParams()
@@ -31,13 +42,39 @@ const CallPage = () => {
       try {
         console.log("Initializing call client...")
 
+        const user = {
+          id: authUser._id,
+          name: authUser.fullName,
+          image: authUser.profilePic
+        }
+
+        const videoClient = new StreamVideoClient({
+          apiKey: STREAM_API_KEY,
+          user,
+          token: tokenData
+        })
+
+        const callInstance = videoClient.call("default", callId)
+
+        await callInstance.join({create:true})
+
+        console.log("Joined call successfully")
+
+        setClient(videoClient)
+        setCall(callInstance)
+
       } catch(error) {
         console.log("Error in initCall",error)
+        toast.error("Could not join the call. Please try again")
+      } finally {
+        setIsConnecting(false)
       }
     }
 
     initCall()
-  }, [])
+  }, [tokenData, authUser, callId])
+
+  if(isLoading || isConnecting) return <PageLoader />
 
 
   return (
